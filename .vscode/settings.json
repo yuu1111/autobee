@@ -1,0 +1,22 @@
+{
+  "Lua.workspace.library": [
+    "${workspaceFolder}/.luadocs/lua"
+  ],
+  "Lua.runtime.version": "Lua 5.2",
+  "Lua.diagnostics.globals": [
+    "component",
+    "computer",
+    "event",
+    "keyboard",
+    "filesystem",
+    "internet",
+    "term",
+    "peripheral",
+    "os",
+    "http",
+    "fs",
+    "shell",
+    "keys",
+    "colors"
+  ]
+}
