@@ -8,32 +8,45 @@
   使用方法:
     1. 養蜂箱のスロット1にプリンセスか女王を入れる
     2. このスクリプトを実行: debug_genetics.lua
-    3. 出力されるデータ構造を確認
+    3. 結果は /tmp/genetics_out.txt に保存される
+    4. pastebin put /tmp/genetics_out.txt でアップロード
 ]]
 
 local component = require("component")
+
+-- 出力ファイル
+local outputFile = io.open("/tmp/genetics_out.txt", "w")
+
+---画面とファイル両方に出力する
+---@param text string 出力テキスト
+local function output(text)
+  print(text)
+  if outputFile then
+    outputFile:write(text .. "\n")
+  end
+end
 
 ---テーブルの中身を再帰的に表示する
 ---@param tbl table 表示するテーブル
 ---@param indent number インデント深さ
 ---@param maxDepth number 最大深さ
-local function printTable(tbl, indent, maxDepth)
+local function outputTable(tbl, indent, maxDepth)
   indent = indent or 0
   maxDepth = maxDepth or 5
 
   if indent > maxDepth then
-    print(string.rep("  ", indent) .. "...")
+    output(string.rep("  ", indent) .. "...")
     return
   end
 
   for k, v in pairs(tbl) do
     local prefix = string.rep("  ", indent)
     if type(v) == "table" then
-      print(prefix .. tostring(k) .. ": {")
-      printTable(v, indent + 1, maxDepth)
-      print(prefix .. "}")
+      output(prefix .. tostring(k) .. ": {")
+      outputTable(v, indent + 1, maxDepth)
+      output(prefix .. "}")
     else
-      print(prefix .. tostring(k) .. ": " .. tostring(v) .. " (" .. type(v) .. ")")
+      output(prefix .. tostring(k) .. ": " .. tostring(v) .. " (" .. type(v) .. ")")
     end
   end
 end
@@ -51,89 +64,94 @@ local function findApiary()
 end
 
 -- メイン処理
-print("===========================================")
-print("AutoBee Genetics Debug Script")
-print("===========================================")
-print("")
+output("===========================================")
+output("AutoBee Genetics Debug Script")
+output("===========================================")
+output("")
 
 local apiary, address = findApiary()
 
 if not apiary then
-  print("ERROR: 養蜂箱が見つかりません")
-  print("AdapterをApiaryに隣接させてください")
+  output("ERROR: 養蜂箱が見つかりません")
+  output("AdapterをApiaryに隣接させてください")
+  if outputFile then outputFile:close() end
   return
 end
 
-print("養蜂箱を検出: " .. address)
-print("")
+output("養蜂箱を検出: " .. address)
+output("")
 
 -- スロット1のアイテムを取得
 local item = apiary.getStackInSlot(1)
 
 if not item then
-  print("ERROR: スロット1にアイテムがありません")
-  print("プリンセスか女王をスロット1に入れてください")
+  output("ERROR: スロット1にアイテムがありません")
+  output("プリンセスか女王をスロット1に入れてください")
+  if outputFile then outputFile:close() end
   return
 end
 
-print("=== 基本情報 ===")
-print("name: " .. tostring(item.name))
-print("label: " .. tostring(item.label))
-print("count: " .. tostring(item.count))
-print("")
+output("=== 基本情報 ===")
+output("name: " .. tostring(item.name))
+output("label: " .. tostring(item.label))
+output("count: " .. tostring(item.count))
+output("")
 
-print("=== 全データ構造 ===")
-printTable(item, 0, 6)
-print("")
+output("=== 全データ構造 ===")
+outputTable(item, 0, 6)
+output("")
 
 -- individual があるか確認
 if item.individual then
-  print("=== individual 発見 ===")
+  output("=== individual 発見 ===")
 
   if item.individual.genome then
-    print("")
-    print("=== genome 発見 ===")
+    output("")
+    output("=== genome 発見 ===")
 
     local genome = item.individual.genome
 
     if genome.active then
-      print("")
-      print("--- Active 遺伝子 ---")
+      output("")
+      output("--- Active 遺伝子 ---")
       if genome.active.species then
-        print("species: " .. tostring(genome.active.species))
+        output("species: " .. tostring(genome.active.species))
       end
-      printTable(genome.active, 1, 3)
+      outputTable(genome.active, 1, 3)
     end
 
     if genome.inactive then
-      print("")
-      print("--- Inactive 遺伝子 ---")
+      output("")
+      output("--- Inactive 遺伝子 ---")
       if genome.inactive.species then
-        print("species: " .. tostring(genome.inactive.species))
+        output("species: " .. tostring(genome.inactive.species))
       end
-      printTable(genome.inactive, 1, 3)
+      outputTable(genome.inactive, 1, 3)
     end
   else
-    print("genome が見つかりません")
-    print("individual の内容:")
-    printTable(item.individual, 1, 4)
+    output("genome が見つかりません")
+    output("individual の内容:")
+    outputTable(item.individual, 1, 4)
   end
 
   -- 分析済みか確認
   if item.individual.isAnalyzed ~= nil then
-    print("")
-    print("isAnalyzed: " .. tostring(item.individual.isAnalyzed))
+    output("")
+    output("isAnalyzed: " .. tostring(item.individual.isAnalyzed))
   end
 else
-  print("individual が見つかりません")
-  print("")
-  print("利用可能なキー:")
+  output("individual が見つかりません")
+  output("")
+  output("利用可能なキー:")
   for k, _ in pairs(item) do
-    print("  - " .. tostring(k))
+    output("  - " .. tostring(k))
   end
 end
 
-print("")
-print("===========================================")
-print("デバッグ完了")
-print("===========================================")
+output("")
+output("===========================================")
+output("デバッグ完了 - 結果は /tmp/genetics_out.txt")
+output("===========================================")
+
+-- ファイルを閉じる
+if outputFile then outputFile:close() end
