@@ -10,7 +10,6 @@
       "alvearyChestDirection",
       "delay",
       "debugPrints",
-      "size",
       "getItemData",
       "pushItem",
       "pullItem",

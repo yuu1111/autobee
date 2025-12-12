@@ -10,16 +10,18 @@ AutoBeeはMinecraft Forestryモジュールの養蜂自動化システム。Open
 
 ```
 src/
-├── autobee.lua           # メインプログラム（OC用）
-├── autobeeCore.lua       # 共通ロジック（Container/Apiaryクラス）
+├── main.lua              # メインプログラム（エントリポイント）
+├── inventory.lua         # インベントリ操作（Container クラス）
+├── apiary.lua            # 養蜂箱クラス（Apiary クラス）
+├── config.lua            # 設定ファイル
 └── installAutoBee.lua    # インストーラー
 ```
 
 ### コア設計
 
-**Container クラス**: インベントリ操作のラッパー（getItemData, push, pull）
+**Container クラス** (inventory.lua): インベントリ操作のラッパー（getItemData, push, pull）
 
-**Apiary クラス**: Containerを継承。apiary/gendustry/alvearyの3タイプに対応
+**Apiary クラス** (apiary.lua): Containerを継承。apiary/gendustry/alvearyの3タイプに対応
 - スロット管理: 入力スロット（1=女王/プリンセス, 2=ドローン）、出力スロット（タイプにより3-9）
 - チェスト連携: `chestSize`の末尾2スロット（プリンセス用・ドローン用）を予約領域として使用
 
@@ -29,7 +31,7 @@ src/
 - `event.timer()`: 定期実行
 - `keyboard.isKeyDown()`: キー入力検出
 
-## 設定値（autobeeCore.lua）
+## 設定値（config.lua）
 
 - `chestSize`: 出力チェストのスロット数（デフォルト: 27）
 - `apiaryChestDirection`/`alvearyChestDirection`: チェストの方向
