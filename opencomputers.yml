@@ -1,6 +1,6 @@
 # OpenComputers standard library for selene
 ---
-name: occc
+name: opencomputers
 
 globals:
   # Extended OS

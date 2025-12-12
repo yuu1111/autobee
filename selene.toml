@@ -1,6 +1,6 @@
-# selene configuration for ComputerCraft/OpenComputers
+# selene configuration for OpenComputers
 
-std = "occc"
+std = "opencomputers"
 
 [lints]
 # Intentional globals for cross-file usage
