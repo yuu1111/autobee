@@ -1,0 +1,26 @@
+# OpenComputers用selene標準ライブラリ定義
+
+[selene]
+base = "lua51"
+name = "opencomputers"
+
+# プロジェクト内で定義するグローバル変数
+[globals]
+# config.lua
+chestSize = { property = true }
+apiaryChestDirection = { property = true }
+alvearyChestDirection = { property = true }
+delay = { property = true }
+debugPrints = { property = true }
+
+# inventory.lua
+getItemData = { property = true }
+pushItem = { property = true }
+pullItem = { property = true }
+Container = { property = true }
+
+# apiary.lua
+Apiary = { property = true }
+
+# device.lua
+DeviceManager = { property = true }

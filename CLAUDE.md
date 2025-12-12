@@ -13,6 +13,7 @@ src/
 ├── main.lua              # メインプログラム（エントリポイント）
 ├── inventory.lua         # インベントリ操作（Container クラス）
 ├── apiary.lua            # 養蜂箱クラス（Apiary クラス）
+├── device.lua            # デバイス管理（DeviceManager クラス）
 ├── config.lua            # 設定ファイル
 └── installAutoBee.lua    # インストーラー
 ```
@@ -24,6 +25,10 @@ src/
 **Apiary クラス** (apiary.lua): Containerを継承。apiary/gendustry/alvearyの3タイプに対応
 - スロット管理: 入力スロット（1=女王/プリンセス, 2=ドローン）、出力スロット（タイプにより3-9）
 - チェスト連携: `chestSize`の末尾2スロット（プリンセス用・ドローン用）を予約領域として使用
+
+**DeviceManager クラス** (device.lua): 養蜂箱デバイスの検出・登録・タイマー管理
+- デバイス検出: `component.list()`で養蜂箱を自動検出
+- タイマー管理: 各養蜂箱に`event.timer()`を設定して定期チェック
 
 ### OC API使用
 

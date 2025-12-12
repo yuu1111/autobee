@@ -14,7 +14,8 @@
       "pushItem",
       "pullItem",
       "Container",
-      "Apiary"
+      "Apiary",
+      "DeviceManager"
     ]
   },
   "runtime": {

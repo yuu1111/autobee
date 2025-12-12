@@ -10,7 +10,7 @@
 ]]
 
 local baseURL = "https://raw.githubusercontent.com/yuu1111/autobee/master/src/"
-local files = { "main.lua", "inventory.lua", "apiary.lua", "config.lua" }
+local files = { "main.lua", "inventory.lua", "apiary.lua", "device.lua", "config.lua" }
 
 -- OpenComputers ライブラリ読み込み
 local filesystem = require("filesystem")

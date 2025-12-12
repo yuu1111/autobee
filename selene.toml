@@ -1,11 +1,15 @@
-# selene configuration for OpenComputers
+# selene設定
 
 std = "opencomputers"
 
 [lints]
-# Intentional globals for cross-file usage
+# ファイル間で使用するグローバル変数を許可
 unscoped_variables = "allow"
-# Unused functions are called from other files
+# 他ファイルから呼び出される未使用関数を許可
 unused_variable = "allow"
-# Multiple statements in pcall is intentional pattern
+# pcall内の複数文は意図的なパターン
 multiple_statements = "allow"
+# dofileで読み込むグローバル変数を許可
+undefined_variable = "allow"
+# OC拡張関数(os.sleepなど)を許可
+incorrect_standard_library_use = "allow"

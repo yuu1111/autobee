@@ -1,5 +1,5 @@
-# StyLua configuration for ComputerCraft/OpenComputers
-# CC/OC use 2-space indentation traditionally
+# StyLua設定
+# OC/CCは伝統的に2スペースインデント
 
 column_width = 120
 line_endings = "Unix"
