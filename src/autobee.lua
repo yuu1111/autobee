@@ -16,7 +16,7 @@ print("Starting AutoBee...")
 local function loadCore()
   local searchPath = "/home/autobee/"
   local library = "autobeeCore.lua"
-  local coreURL = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/autobeeCore.lua"
+  local coreURL = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/src/autobeeCore.lua"
 
   if not filesystem.exists(searchPath) then
     filesystem.makeDirectory(searchPath)

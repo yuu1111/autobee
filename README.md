@@ -11,11 +11,11 @@ AutoBeeはForestry Apiaryを自動化します。プリンセスとドローン�
 OpenComputersのコンピュータで以下を実行:
 
 ```lua
-wget https://raw.githubusercontent.com/jetpack-maniac/autobee/master/installAutoBee.lua
+wget https://raw.githubusercontent.com/jetpack-maniac/autobee/master/src/installAutoBee.lua
 installAutoBee
 ```
 
-または手動で `/home/autobee/` に配置:
+または手動で `/home/autobee/` に `src/` 内のファイルを配置:
 - `autobee.lua`
 - `autobeeCore.lua`
 

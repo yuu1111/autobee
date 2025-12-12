@@ -1,7 +1,7 @@
 -- AutoBee Installer for OpenComputers
 local urls = {
-  autobee = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/autobee.lua",
-  autobeeCore = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/autobeeCore.lua",
+  autobee = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/src/autobee.lua",
+  autobeeCore = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/src/autobeeCore.lua",
 }
 
 -- OpenComputers

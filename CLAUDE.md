@@ -9,9 +9,10 @@ AutoBeeはMinecraft Forestryモジュールの養蜂自動化システム。Open
 ## アーキテクチャ
 
 ```
-autobee.lua           # メインプログラム（OC用）
-autobeeCore.lua       # 共通ロジック（Container/Apiaryクラス）
-installAutoBee.lua    # インストーラー
+src/
+├── autobee.lua           # メインプログラム（OC用）
+├── autobeeCore.lua       # 共通ロジック（Container/Apiaryクラス）
+└── installAutoBee.lua    # インストーラー
 ```
 
 ### コア設計
@@ -45,9 +46,9 @@ installAutoBee.lua    # インストーラー
 ### Lint/Format
 
 ```bash
-selene *.lua      # Linter
-stylua *.lua      # Formatter
-stylua --check *.lua
+selene src/*.lua      # Linter
+stylua src/*.lua      # Formatter
+stylua --check src/*.lua
 ```
 
 ### EmmyLua (型補完)
