@@ -1,5 +1,9 @@
--- AutoBee 設定ファイル
--- このファイルを編集してカスタマイズしてください
+--[[
+  config.lua - 設定ファイル
+  このファイルを編集してカスタマイズ
+
+  定義グローバル: chestSize, apiaryChestDirection, alvearyChestDirection, delay, debugPrints
+]]
 
 -- 出力チェストのスロット数
 chestSize = 27

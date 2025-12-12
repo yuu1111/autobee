@@ -1,5 +1,14 @@
--- AutoBee メインプログラム
--- Forestry養蜂箱の自動化システム
+--[[
+  autobee.lua - メインプログラム
+  Forestry養蜂箱の自動化システム
+
+  依存: main.lua (モジュールローダー)
+  使用グローバル: Apiary, delay, size
+
+  操作:
+    Ctrl+W: 終了
+    Ctrl+L: 画面クリア
+]]
 
 local component = require("component")
 local keyboard = require("keyboard")
@@ -14,6 +23,9 @@ print("Starting AutoBee...")
 -- モジュール読み込み
 dofile("/home/autobee/main.lua")
 
+---指定アドレスが養蜂箱コンポーネントか判定する
+---@param address string|nil コンポーネントアドレス
+---@return boolean 養蜂箱か
 local function isApiary(address)
   if address == nil then
     return false
@@ -30,6 +42,7 @@ local function isApiary(address)
   return false
 end
 
+---養蜂箱が接続されているか確認し、なければ終了する
 local function peripheralCheck()
   local apiary = nil
   for address, componentType in pairs(component.list()) do
@@ -46,6 +59,7 @@ local function peripheralCheck()
   end
 end
 
+---全ての養蜂箱タイマーをキャンセルする
 local function removeDevices()
   for _, timerID in pairs(apiaryTimerIDs) do
     event.cancel(timerID)
@@ -53,6 +67,9 @@ local function removeDevices()
   apiaryTimerIDs = {}
 end
 
+---デバイスを養蜂箱として登録し、タイマーを設定する
+---@param address string|nil コンポーネントアドレス
+---@return boolean 登録成功したか
 local function addDevice(address)
   if address == nil then
     return false
@@ -67,17 +84,22 @@ local function addDevice(address)
   return false
 end
 
+---コンポーネント接続時のイベントハンドラ
+---@param _ any 未使用
+---@param address string コンポーネントアドレス
 local function deviceConnect(_, address)
   addDevice(address)
 end
 
 local initDevices
 
+---コンポーネント切断時のイベントハンドラ
 local function deviceDisconnect()
   removeDevices()
   initDevices()
 end
 
+---全デバイスを走査して養蜂箱を登録し、イベントリスナーを設定する
 initDevices = function()
   event.ignore("component_available", deviceConnect)
   event.ignore("component_removed", deviceDisconnect)
@@ -89,6 +111,7 @@ initDevices = function()
   event.listen("component_removed", deviceDisconnect)
 end
 
+---実行状況を表示する
 local function printInfo()
   print("AutoBee running.")
   print("Hold Ctrl+W to stop. Hold Ctrl+L to clear terminal.")

@@ -1,4 +1,14 @@
--- AutoBee モジュールローダー
+--[[
+  main.lua - モジュールローダー
+  設定とモジュールを読み込む
+
+  読み込み順:
+    1. config.lua (設定)
+    2. inventory.lua (インベントリ操作)
+    3. apiary.lua (養蜂箱クラス)
+
+  定義グローバル: size
+]]
 
 local filesystem = require("filesystem")
 local basePath = "/home/autobee/"
@@ -15,11 +25,13 @@ else
   debugPrints = false
 end
 
--- モジュール読み込み(依存順)
+-- モジュール読み込み
 dofile(basePath .. "inventory.lua")
 dofile(basePath .. "apiary.lua")
 
--- ユーティリティ
+---テーブルの要素数を取得する
+---@param input table テーブル
+---@return number 要素数
 function size(input)
   local count = 0
   for _, _ in pairs(input) do

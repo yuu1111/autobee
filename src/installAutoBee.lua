@@ -1,5 +1,13 @@
--- AutoBee インストーラー (OpenComputers用)
--- GitHubからautobeeファイルをダウンロードしてインストールする
+--[[
+  installAutoBee.lua - インストーラー
+  GitHubからautobeeファイルをダウンロードしてインストール
+
+  使用方法:
+    wget https://raw.githubusercontent.com/yuu1111/autobee/master/src/installAutoBee.lua
+    installAutoBee
+
+  インストール先: /home/autobee/
+]]
 
 local baseURL = "https://raw.githubusercontent.com/yuu1111/autobee/master/src/"
 local files = { "autobee.lua", "main.lua", "inventory.lua", "apiary.lua", "config.lua" }
