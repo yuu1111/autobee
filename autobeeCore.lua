@@ -1,12 +1,5 @@
 --- Configuration
 
--- These config options tell the apiaries to drop items into the world
--- WARNING: unless you're using some kind of system to pick them up,
--- this will cause lag due to floating items piling up in the world
--- **Currently unused, WIP
--- dropProducts = "false"
--- dropDrones = "false"
-
 -- The max size of the output inventory
 chestSize = 27
 
@@ -19,11 +12,12 @@ delay = 2
 
 -- debug printing for functions
 debugPrints = false
+
 --- End of Configuration
 
-local queenNames = {"beeQueenGE", "forestry:beeQueenGE", "forestry:bee_queen_ge"}
-local princessNames = {"beePrincessGE", "forestry:beePrincessGE", "forestry:bee_princess_ge"}
-local droneNames = {"beeDroneGE", "forestry:beeDroneGE", "forestry:bee_drone_ge"}
+local queenNames = { "beeQueenGE", "forestry:beeQueenGE", "forestry:bee_queen_ge" }
+local princessNames = { "beePrincessGE", "forestry:beePrincessGE", "forestry:bee_princess_ge" }
+local droneNames = { "beeDroneGE", "forestry:beeDroneGE", "forestry:bee_drone_ge" }
 
 --------------------------------------------------------------------------------
 -- Misc Functions
@@ -39,7 +33,7 @@ end
 
 -- searches a sample table and returns true if any element matches the criterion
 function matchAny(criterion, sample)
-  for i=1, #sample do
+  for i = 1, #sample do
     if criterion == sample[i] then
       return true
     end
@@ -47,71 +41,50 @@ function matchAny(criterion, sample)
   return false
 end
 
--- Dependency Check for required item APIs
+-- Dependency Check for OpenPeripherals
 function dependencyCheck(device)
-  if device == nil then return nil end
-  if device.getTransferLocations ~= nil then
-    peripheralVersion = "Plethora"
-  elseif device.canBreed ~= nil then
-    peripheralVersion = "OpenPeripherals"
+  if device == nil then
+    return nil
   end
-  if peripheralVersion == nil then
-    error("This game server lacks a required game mod. 1.7.10 requires OpePeripherals and 1.10.2 requires Plethora Peripherals.")
+  if device.canBreed == nil then
+    error("This game server lacks OpenPeripherals mod which is required for AutoBee.")
   end
   return true
 end
 
--- Peripheral Interfaces
+-- Peripheral Interfaces (OpenPeripherals)
 
 function getItemData(container, slot)
   local itemMeta = nil
-  if peripheralVersion == "Plethora" then
-    if pcall(function() itemMeta = container.getItemMeta(slot) end) then
-      return itemMeta
-    elseif debugPrints == true then
-      print("AutoBee Error: PCall failed on plethora check slot")
-    end
-  elseif peripheralVersion == "OpenPeripherals" then
-    if pcall(function() itemMeta = container.getStackInSlot(slot) end) then
-      return itemMeta
-    elseif debugPrints == true then
-      print("AutoBee Error: PCall failed on openp check slot")
-    end    
+  if pcall(function()
+    itemMeta = container.getStackInSlot(slot)
+  end) then
+    return itemMeta
+  elseif debugPrints then
+    print("AutoBee Error: Failed to get item data from slot " .. slot)
   end
 end
 
--- Interface for item pushing, follows the OpenPeripherals/Plethora format directly
 function pushItem(container, destinationDirection, fromSlot, amount, destinationSlot)
-  if peripheralVersion == "Plethora" then
-    if pcall(function() container.pushItems(destinationDirection, fromSlot, amount, destinationSlot) end) then
-      return true
-    elseif debugPrints == true then
-      print("AutoBee Error: PCall failed on plethora push")
-    end
-  elseif peripheralVersion == "OpenPeripherals" then
-    if pcall(function() container.pushItemIntoSlot(destinationDirection, fromSlot, amount, destinationSlot) end) then
-      return true
-    elseif debugPrints == true then
-      print("AutoBee Error: PCall failed on openp push")
-    end
+  if
+    pcall(function()
+      container.pushItemIntoSlot(destinationDirection, fromSlot, amount, destinationSlot)
+    end)
+  then
+    return true
+  elseif debugPrints then
+    print("AutoBee Error: Failed to push item")
   end
 end
 
--- Interface for item pulling,  follows the OpenPeripherals/Plethora format directly
 function pullItem(container, sourceDirection, fromSlot, amount, destinationSlot)
-  if peripheralVersion == "Plethora" then
-    if pcall(function() container.pullItems(sourceDirection, fromSlot, amount, destinationSlot) end) then
-      return true
-    elseif debugPrints == true then
-      print("AutoBee Error: PCall failed on plethora pull")
-    end
-  elseif peripheralVersion == "OpenPeripherals" then
-    if pcall(function() container.pullItemIntoSlot(sourceDirection, fromSlot, amount, destinationSlot) end) then
-      return true
-    elseif debugPrints == true then
-      print("AutoBee Error: PCall failed on openp pull")
-    end
-  end 
+  if pcall(function()
+    container.pullItemIntoSlot(sourceDirection, fromSlot, amount, destinationSlot)
+  end) then
+    return true
+  elseif debugPrints then
+    print("AutoBee Error: Failed to pull item")
+  end
 end
 
 -- End of Misc Functions
@@ -125,12 +98,10 @@ function Container(tileEntity)
     return getItemData(tileEntity, slot)
   end
 
-  -- Interface for item pushing, follows the OpenPeripherals/Plethora format directly
   function self.push(destinationDirection, fromSlot, amount, destinationSlot)
     return pushItem(tileEntity, destinationDirection, fromSlot, amount, destinationSlot)
   end
 
-  -- Interface for item pulling,  follows the OpenPeripherals/Plethora format directly
   function self.pull(sourceDirection, fromSlot, amount, destinationSlot)
     return pullItem(tileEntity, sourceDirection, fromSlot, amount, destinationSlot)
   end
@@ -141,137 +112,117 @@ end
 --------------------------------------------------------------------------------
 -- Apiary class
 
-function Apiary(device, address, type)
+function Apiary(device, address, apiaryType)
   local self = Container(device)
 
   function self.getID()
     return address
   end
 
-  function self.type()
-    return type
+  function self.getType()
+    return apiaryType
   end
-  
-  function getChestSide()
-    if type == "apiary" or type == "gendustry" then
+
+  local function getChestSide()
+    if apiaryType == "apiary" or apiaryType == "gendustry" then
       return apiaryChestDirection
-    elseif type == "alveary" then
+    elseif apiaryType == "alveary" then
       return alvearyChestDirection
     end
   end
 
-  -- Checks to see if the princess/queen slot (1) is empty or full
   function self.isPrincessSlotOccupied()
     return self.getItemData(1) ~= nil
   end
 
-  -- Checks to see if the drone slot (2) is empty or full
   function self.isDroneSlotOccupied()
-     return self.getItemData(2) ~= nil
+    return self.getItemData(2) ~= nil
   end
 
-  -- Removes a princess from the output to it's proper chest slot
   function self.pushPrincess(slot)
-    self.push(getChestSide(),slot,1,chestSize)
+    self.push(getChestSide(), slot, 1, chestSize)
   end
 
-  -- Pulls princess or queen from appropriate chest slot
   function self.pullPrincess()
-    self.pull(getChestSide(),chestSize,1,1)
+    self.pull(getChestSide(), chestSize, 1, 1)
   end
 
-  -- Removes a drone from the output to it's proper chest slot
   function self.pushDrone(slot)
-    self.push(getChestSide(),slot,64,chestSize-1)
+    self.push(getChestSide(), slot, 64, chestSize - 1)
   end
 
-  -- Pulls drone from appropriate chest slot
   function self.pullDrone()
-    self.pull(getChestSide(),chestSize-1,64,2)
+    self.pull(getChestSide(), chestSize - 1, 64, 2)
   end
 
-  -- Moves drone from output into input
+  -- Moves drone from output into input (via chest)
   function self.moveDrone(slot)
-    if peripheralVersion == "Plethora" then
-      self.push("self", slot, 64, 2)
-      return true
-    elseif peripheralVersion == "OpenPeripherals" then
-      self.pushDrone(slot)
-      self.pullDrone()
-    end
-    return false
+    self.pushDrone(slot)
+    self.pullDrone()
   end
 
-  -- Moves princess from output into input
+  -- Moves princess from output into input (via chest)
   function self.movePrincess(slot)
-    if peripheralVersion == "Plethora" then
-      self.push("self", slot, 1, 1)
-      return true
-    elseif peripheralVersion == "OpenPeripherals" then
-      self.pushPrincess(slot)
-      self.pullPrincess()
-      return true
-    end
+    self.pushPrincess(slot)
+    self.pullPrincess()
   end
 
   function self.isPrincessOrQueen(slot)
-    local type = self.itemType(slot)
-    if type == "queen" or type == "princess" then
-      return true
-    else
-      return false
-    end
+    local itemType = self.itemType(slot)
+    return itemType == "queen" or itemType == "princess"
   end
 
   function self.itemType(slot)
-    if self.getItemData(slot) ~= nil then
-      local name = self.getItemData(slot).name
-      if matchAny(name, queenNames) then return "queen" end
-      if matchAny(name, princessNames) then return "princess" end
-      if matchAny(name, droneNames) then return "drone" end
+    local item = self.getItemData(slot)
+    if item ~= nil then
+      local name = item.name
+      if matchAny(name, queenNames) then
+        return "queen"
+      end
+      if matchAny(name, princessNames) then
+        return "princess"
+      end
+      if matchAny(name, droneNames) then
+        return "drone"
+      end
       return false
-    else
-      return nil
     end
+    return nil
   end
 
   function self.isDrone(slot)
-    if self.itemType(slot) == "drone" then
-      return true
-    else
-      return false
-    end
+    return self.itemType(slot) == "drone"
   end
 
   function self.checkInput()
-    for slot=1,2 do
-      if self.isPrincessSlotOccupied() == false then
+    for _ = 1, 2 do
+      if not self.isPrincessSlotOccupied() then
         self.pullPrincess()
       end
-      if self.isDroneSlotOccupied() == false then
+      if not self.isDroneSlotOccupied() then
         self.pullDrone()
       end
     end
   end
 
   function self.checkOutput(firstSlot, lastSlot)
-    for slot=firstSlot, lastSlot do
-      local type = self.itemType(slot)
-      if type ~= nil then
-        if type == "princess" then
-          if self.isPrincessSlotOccupied() == true then
-            self.push(chestDir, slot)
+    for slot = firstSlot, lastSlot do
+      local itemType = self.itemType(slot)
+      if itemType ~= nil then
+        if itemType == "princess" then
+          if self.isPrincessSlotOccupied() then
+            self.push(getChestSide(), slot)
           else
             self.movePrincess(slot)
           end
-        elseif type == "drone" then
-          if self.isDroneSlotOccupied() == true then
-            self.push(chestDir, slot)
+        elseif itemType == "drone" then
+          if self.isDroneSlotOccupied() then
+            self.push(getChestSide(), slot)
           else
             self.moveDrone(slot)
           end
         else
-          self.push(chestDir, slot)
+          self.push(getChestSide(), slot)
         end
       end
     end

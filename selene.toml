@@ -1,0 +1,11 @@
+# selene configuration for ComputerCraft/OpenComputers
+
+std = "occc"
+
+[lints]
+# Intentional globals for cross-file usage
+unscoped_variables = "allow"
+# Unused functions are called from other files
+unused_variable = "allow"
+# Multiple statements in pcall is intentional pattern
+multiple_statements = "allow"

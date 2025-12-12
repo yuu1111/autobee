@@ -1,0 +1,102 @@
+# OpenComputers standard library for selene
+---
+name: occc
+
+globals:
+  # Extended OS
+  os:
+    any: true
+
+  # OpenComputers APIs
+  component:
+    any: true
+  computer:
+    any: true
+  event:
+    any: true
+  keyboard:
+    any: true
+  filesystem:
+    any: true
+  internet:
+    any: true
+  unicode:
+    any: true
+  sides:
+    any: true
+  gpu:
+    any: true
+  robot:
+    any: true
+  term:
+    any: true
+  shell:
+    any: true
+  colors:
+    any: true
+
+  # Project globals (from autobeeCore.lua)
+  Apiary:
+    any: true
+  Container:
+    any: true
+  dependencyCheck:
+    any: true
+  size:
+    any: true
+  delay:
+    any: true
+  chestSize:
+    any: true
+  apiaryChestDirection:
+    any: true
+  alvearyChestDirection:
+    any: true
+  debugPrints:
+    any: true
+
+  # Standard Lua globals
+  string:
+    any: true
+  table:
+    any: true
+  math:
+    any: true
+  io:
+    any: true
+  pairs:
+    any: true
+  ipairs:
+    any: true
+  print:
+    any: true
+  error:
+    any: true
+  pcall:
+    any: true
+  dofile:
+    any: true
+  require:
+    any: true
+  type:
+    any: true
+  tostring:
+    any: true
+  tonumber:
+    any: true
+  setmetatable:
+    any: true
+  getmetatable:
+    any: true
+  rawget:
+    any: true
+  rawset:
+    any: true
+  select:
+    any: true
+  next:
+    any: true
+  assert:
+    any: true
+  _G:
+    any: true
