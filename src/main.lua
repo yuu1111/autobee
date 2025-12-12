@@ -1,4 +1,4 @@
--- AutoBee コアライブラリ
+-- AutoBee モジュールローダー
 
 local filesystem = require("filesystem")
 local basePath = "/home/autobee/"

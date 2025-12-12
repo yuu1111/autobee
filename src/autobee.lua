@@ -1,11 +1,9 @@
--- AutoBee メインプログラム (OpenComputers用)
+-- AutoBee メインプログラム
 -- Forestry養蜂箱の自動化システム
 
 local component = require("component")
 local keyboard = require("keyboard")
 local event = require("event")
-local filesystem = require("filesystem")
-local internet = require("internet")
 local term = require("term")
 
 local running = true
@@ -13,35 +11,8 @@ local apiaryTimerIDs = {}
 
 print("Starting AutoBee...")
 
--- コアライブラリを読み込む(なければGitHubから取得)
-local function loadCore()
-  local searchPath = "/home/autobee/"
-  local library = "autobeeCore.lua"
-  local coreURL = "https://raw.githubusercontent.com/yuu1111/autobee/master/src/autobeeCore.lua"
-
-  if not filesystem.exists(searchPath) then
-    filesystem.makeDirectory(searchPath)
-  end
-
-  if filesystem.exists(searchPath .. library) then
-    dofile(searchPath .. library)
-    print("Loaded AutoBee Core")
-  else
-    print("Missing AutoBee Core, fetching from Github...")
-    local file = io.open(searchPath .. library, "w")
-    if file then
-      for chunk in internet.request(coreURL) do
-        file:write(chunk)
-        file:flush()
-      end
-      file:close()
-      dofile(searchPath .. library)
-      print("Fetched and loaded AutoBee Core")
-    else
-      error("Could not create autobeeCore.lua")
-    end
-  end
-end
+-- モジュール読み込み
+dofile("/home/autobee/main.lua")
 
 local function isApiary(address)
   if address == nil then
@@ -60,7 +31,6 @@ local function isApiary(address)
 end
 
 local function peripheralCheck()
-  loadCore()
   local apiary = nil
   for address, componentType in pairs(component.list()) do
     local isApiaryComponent = (string.find(componentType, "apiculture") and componentType:sub(21, 21) == "0")
@@ -125,7 +95,6 @@ local function printInfo()
   print(size(apiaryTimerIDs) .. " apiaries connected.")
 end
 
--- メイン
 peripheralCheck()
 if running then
   initDevices()
