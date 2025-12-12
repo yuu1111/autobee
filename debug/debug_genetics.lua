@@ -8,14 +8,13 @@
   使用方法:
     1. 養蜂箱のスロット1にプリンセスか女王を入れる
     2. このスクリプトを実行: debug_genetics.lua
-    3. 結果は /tmp/genetics_out.txt に保存される
-    4. pastebin put /tmp/genetics_out.txt でアップロード
+    3. 結果は /home/genetics_out.txt に保存される
 ]]
 
 local component = require("component")
 
--- 出力ファイル
-local outputFile = io.open("/tmp/genetics_out.txt", "w")
+-- 出力ファイル（/home に保存）
+local outputFile = io.open("/home/genetics_out.txt", "w")
 
 ---画面とファイル両方に出力する
 ---@param text string 出力テキスト
@@ -150,7 +149,7 @@ end
 
 output("")
 output("===========================================")
-output("デバッグ完了 - 結果は /tmp/genetics_out.txt")
+output("デバッグ完了 - 結果は /home/genetics_out.txt")
 output("===========================================")
 
 -- ファイルを閉じる
