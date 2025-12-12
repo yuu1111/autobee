@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "workspace": {
+    "library": [".luadocs/lua/libs", ".luadocs/lua/components"]
+  },
+  "diagnostics": {
+    "globals": [
+      "chestSize",
+      "apiaryChestDirection",
+      "alvearyChestDirection",
+      "delay",
+      "debugPrints",
+      "size",
+      "getItemData",
+      "pushItem",
+      "pullItem",
+      "Container",
+      "Apiary"
+    ]
+  },
+  "runtime": {
+    "version": "Lua 5.2",
+    "path": ["?.lua", "?/init.lua"]
+  }
+}

@@ -1,10 +1,8 @@
 -- AutoBee インストーラー (OpenComputers用)
 -- GitHubからautobeeファイルをダウンロードしてインストールする
 
-local urls = {
-  autobee = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/src/autobee.lua",
-  autobeeCore = "https://raw.githubusercontent.com/jetpack-maniac/autobee/master/src/autobeeCore.lua",
-}
+local baseURL = "https://raw.githubusercontent.com/yuu1111/autobee/master/src/"
+local files = { "autobee.lua", "autobeeCore.lua", "inventory.lua", "apiary.lua", "config.lua" }
 
 -- OpenComputers ライブラリ読み込み
 local filesystem = require("filesystem")
@@ -22,13 +20,12 @@ if not filesystem.exists(installLocation) then
 end
 
 -- 各ファイルをダウンロード
-for filename, url in pairs(urls) do
-  filename = filename .. ".lua"
+for _, filename in ipairs(files) do
   print("Downloading " .. filename .. "...")
   local file = io.open(installLocation .. filename, "w")
   if file then
     -- チャンク単位でダウンロードして書き込み
-    for chunk in internet.request(url) do
+    for chunk in internet.request(baseURL .. filename) do
       file:write(chunk)
       file:flush()
     end
