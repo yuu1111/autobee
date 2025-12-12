@@ -2,9 +2,12 @@
   debug_genetics.lua - 遺伝子API検証スクリプト
   蜂アイテムのデータ構造を調査する
 
+  ダウンロード:
+    wget https://raw.githubusercontent.com/yuu1111/autobee/master/debug/debug_genetics.lua
+
   使用方法:
     1. 養蜂箱のスロット1にプリンセスか女王を入れる
-    2. このスクリプトを実行
+    2. このスクリプトを実行: debug_genetics.lua
     3. 出力されるデータ構造を確認
 ]]
 
